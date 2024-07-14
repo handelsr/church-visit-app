@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todas las Visitas Registradas</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Todas las Visitas Registradas</h1>
+        <table id="visits-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Invitado Por</th>
+                    <th>Secretaria</th>
+                    <th>Iglesia</th>
+                    <th>Cantidad de Visitas</th>
+                </tr>
+            </thead>
+            <tbody id="visits-body">
+                <!-- Aquí se cargarán dinámicamente las filas de la tabla -->
+            </tbody>
+        </table>
+        <button class="btn" onclick="goBack()">Regresar</button>
+    </div>
+    <script src="js/all_visits.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secretaria de Iglesia</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Secretaria de Iglesia</h1>
+        <div class="d-flex justify-content-end mb-4">
+            <button id="new-visit-btn" class="btn btn-primary">Registrar Nueva Visita</button>
+        </div>
+        <div id="visits-table" class="table-responsive">
+            <!-- Aquí se mostrará la tabla de visitas -->
+        </div>
+    </div>
+
+    <!-- Modal para mostrar los detalles de la visita -->
+    <div id="visit-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles de la Visita</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><b>Nombre:</b> <span id="visit-name"></span></p>
+                    <p><b>Teléfono:</b> <span id="visit-phone"></span></p>
+                    <p><b>Dirección:</b> <span id="visit-address"></span></p>
+                    <p><b>Invitado por:</b> <span id="visit-invited-by"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="confirm-attendance-btn" class="btn btn-success">Confirmar Asistencia</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para registrar una nueva visita -->
+    <div id="new-visit-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Registrar Nueva Visita</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="new-visit-form">
+                        <div class="form-group">
+                            <label for="new-visit-name">Nombre:</label>
+                            <input type="text" class="form-control" id="new-visit-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-visit-phone">Teléfono:</label>
+                            <input type="text" class="form-control" id="new-visit-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-visit-address">Dirección:</label>
+                            <input type="text" class="form-control" id="new-visit-address">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-visit-invited-by">Invitado por:</label>
+                            <input type="text" class="form-control" id="new-visit-invited-by" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Visita</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/attendance.js"></script>
+</body>
+</html>

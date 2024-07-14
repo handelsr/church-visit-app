@@ -1,0 +1,94 @@
+/* Estilos generales */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+} */
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos específicos para secretaries.html */
+
+#secretaries-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+#secretaries-list div {
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Estilos específicos para consultation.html */
+
+/* No se requieren estilos adicionales específicos para consultation.html en este momento */
+
+/* styles.css */
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.date-filter {
+    margin-bottom: 20px;
+}
+
+#visits-table {
+    margin-top: 20px;
+}
+
+#visits-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#visits-table th, #visits-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#visits-table th {
+    background-color: #f2f2f2;
+}
+
+#visits-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}

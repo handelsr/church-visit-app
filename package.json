@@ -1,0 +1,17 @@
+{
+  "name": "church-visit-app",
+  "version": "1.0.0",
+  "description": "Aplicación para registrar visitas a la iglesia",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql2": "^3.10.2"
+  },
+  "author": "Tu Nombre",
+  "license": "ISC"
+}
