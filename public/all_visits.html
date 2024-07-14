@@ -4,29 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todas las Visitas Registradas</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Todas las Visitas Registradas</h1>
-        <table id="visits-table">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Teléfono</th>
-                    <th>Dirección</th>
-                    <th>Invitado Por</th>
-                    <th>Secretaria</th>
-                    <th>Iglesia</th>
-                    <th>Cantidad de Visitas</th>
-                </tr>
-            </thead>
-            <tbody id="visits-body">
-                <!-- Aquí se cargarán dinámicamente las filas de la tabla -->
-            </tbody>
-        </table>
-        <button class="btn" onclick="goBack()">Regresar</button>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Todas las Visitas Registradas</h1>
+        <div class="form-group">
+            <input type="text" id="search-input" class="form-control" placeholder="Buscar...">
+        </div>
+        <div class="table-responsive">
+            <table id="visits-table" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Dirección</th>
+                        <th>Invitado Por</th>
+                        <th>Secretaria</th>
+                        <th>Iglesia</th>
+                        <th>Cantidad de Visitas</th>
+                    </tr>
+                </thead>
+                <tbody id="visits-body">
+                    <!-- Aquí se cargarán dinámicamente las filas de la tabla -->
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-between">
+            <button class="btn btn-secondary" onclick="goBack()">Regresar</button>
+            <button class="btn btn-secondary" onclick="goToMain()">Ir a la Pantalla Principal</button>
+        </div>
     </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="js/all_visits.js"></script>
 </body>
 </html>

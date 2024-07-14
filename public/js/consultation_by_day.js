@@ -49,6 +49,7 @@ function updateVisitsTable(visits) {
     }
 
     const table = document.createElement('table');
+    table.classList.add('table', 'table-striped', 'table-hover');
     const header = table.createTHead();
     const row = header.insertRow();
     row.innerHTML = `
@@ -70,4 +71,12 @@ function updateVisitsTable(visits) {
     });
 
     visitsTable.appendChild(table);
+}
+
+function goBack() {
+    window.location.href = 'consultation.html';
+}
+
+function goToMain() {
+    window.location.href = 'index.html'; // Reemplazar con la URL de tu pantalla principal
 }
