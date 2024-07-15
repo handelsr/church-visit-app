@@ -16,3 +16,16 @@ exports.addAttendance = (req, res) => {
         res.json(result);
     });
 };
+
+
+exports.toggleStoodUp = (req, res) => {
+    const { id } = req.params;
+    const { stood_up } = req.body;
+    
+        Attendance.updateStoodUp(id, stood_up, (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json(result);
+        });
+};

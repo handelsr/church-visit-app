@@ -12,4 +12,7 @@ router.get('/visits', VisitorController.getVisitorsAbsentByChurch);
 router.post('/:id', Attendance.addAttendance);
 
 
+router.post('/stand_up/:id', Attendance.toggleStoodUp);
+
+
 module.exports = router;

@@ -51,6 +51,7 @@ function updateVisitsTable(visitors) {
     tableBody.innerHTML = '';
 
     visitors.forEach(visitor => {
+        const attendanceDays = formatAttendanceDays(visitor.attendance_days.split(','));
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${visitor.name}</td>
@@ -60,9 +61,22 @@ function updateVisitsTable(visitors) {
             <td>${visitor.secretary_name}</td>
             <td>${visitor.church_name}</td>
             <td>${visitor.visits_count}</td>
+            <td>${attendanceDays}</td>
         `;
         tableBody.appendChild(row);
     });
+}
+
+function formatAttendanceDays(attendanceDays) {
+    if (!attendanceDays || attendanceDays.length === 0) return '';
+    
+    const dayNames = ['DO', 'LU', 'MA', 'MI', 'JU', 'VI', 'SA'];
+    return attendanceDays.map(day => {
+        const date = moment(day, 'YYYY-MM-DD').toDate()
+        const dayNumber = date.getDate();
+        const dayName = dayNames[date.getDay()];
+        return `${dayName} ${dayNumber}`;
+    }).join(', ');
 }
 
 function filterVisits(query) {

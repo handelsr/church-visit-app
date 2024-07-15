@@ -57,7 +57,8 @@ function updateVisitsTable(visits) {
         <th>Teléfono</th>
         <th>Hora de Llegada</th>
         <th>Nombre de quien Invitó</th>
-        <th>Cantidad de Visitas</th>`;
+        <th>Cantidad de Visitas</th>
+        <th>Puesto de Pie</th>`;
 
     const tbody = table.createTBody();
     visits.forEach(visit => {
@@ -67,10 +68,38 @@ function updateVisitsTable(visits) {
             <td>${visit.phone}</td>
             <td>${visit.arrival_time}</td>
             <td>${visit.invited_by}</td>
-            <td>${visit.count}</td>`;
+            <td>${visit.count}</td>
+            <td>
+                <button class="btn btn-${visit.stood_up ? 'success' : 'secondary'}" onclick="toggleStoodUp(${visit.attendance_id}, ${!visit.stood_up}, this)">
+                    ${visit.stood_up ? 'Sí' : 'No'}
+                </button>
+            </td>`;
     });
 
     visitsTable.appendChild(table);
+}
+
+function toggleStoodUp(visitId, stoodUp, el) {
+    el.classList.remove(stoodUp ? "btn-secondary" : "btn-success")
+    el.classList.add(stoodUp ? "btn-success" : "btn-secondary")
+    el.innerHTML = stoodUp ? "Sí" : "No"
+
+    fetch(`/api/attendance/stand_up/${visitId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ stood_up: stoodUp })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            filterVisitsByDate(document.getElementById('date').value);
+        } else {
+            console.error('Error al actualizar la visita:', data.message);
+        }
+    })
+    .catch(error => console.error('Error al actualizar la visita:', error));
 }
 
 function goBack() {

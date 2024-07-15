@@ -12,7 +12,7 @@ const Visitor = {
     },
 
     get: (callback) => {
-        const sql = 'SELECT v.name, v.phone, v.address, v.invited_by, s.`name` secretary_name, c.`name` church_name, (SELECT COUNT(sa.id) FROM attendance sa WHERE sa.visitor_id = v.id) visits_count FROM visitors v LEFT JOIN secretaries s ON v.secretary_id = s.id INNER JOIN churches c ON c.id = s.church_id';
+        const sql = 'SELECT v.name, v.phone, v.address, v.invited_by, s.`name` secretary_name, c.`name` church_name, (SELECT COUNT(sa.id) FROM attendance sa WHERE sa.visitor_id = v.id) visits_count, (SELECT GROUP_CONCAT(DATE_FORMAT(a.date_time, "%Y-%m-%d") SEPARATOR ",") FROM attendance a WHERE a.visitor_id = v.id) AS attendance_days FROM visitors v LEFT JOIN secretaries s ON v.secretary_id = s.id INNER JOIN churches c ON c.id = s.church_id';
         connection.query(sql, (err, results) => {
             if (err) {
                 return callback(err);
@@ -39,7 +39,7 @@ const Visitor = {
         });
     },
     getVisitByDate: (date, callback) => {
-        const sql = 'SELECT v.*, TIME(a.date_time) arrival_time, (SELECT COUNT(sa.id) FROM attendance sa WHERE sa.visitor_id = v.id) count FROM visitors v INNER JOIN attendance a ON a.visitor_id = v.id WHERE DATE(a.date_time) = DATE(?) ORDER BY TIME(a.date_time)';
+        const sql = 'SELECT v.*, a.stood_up, a.id attendance_id, TIME(a.date_time) arrival_time, (SELECT COUNT(sa.id) FROM attendance sa WHERE sa.visitor_id = v.id) count FROM visitors v INNER JOIN attendance a ON a.visitor_id = v.id WHERE DATE(a.date_time) = DATE(?) ORDER BY TIME(a.date_time)';
         connection.query(sql, [date], (err, results) => {
             if (err) {
                 return callback(err);
