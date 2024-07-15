@@ -11,13 +11,6 @@ ws.onerror = (error) => {
     console.error('Error en la conexión WebSocket:', error);
 };
 
-ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    if (data.type === 'update_visits') {
-        loadVisitsTable();
-    }
-};
-
 document.addEventListener('DOMContentLoaded', () => {
     loadVisitsTable();
 
@@ -234,7 +227,8 @@ function confirmAttendance(visitId) {
     .then(response => {
         if (response.ok) {
             $('#visit-modal').modal('hide');
-            ws.send(JSON.stringify({ type: 'update_visits' }));
+            ws.send(JSON.stringify({ type: 'confirm_attendance' }));
+            loadVisitsTable()
             Swal.fire({
                 title: "¡Buenas noticias!",
                 text: "La asistencia ha sido confirmada",
@@ -282,7 +276,7 @@ function saveNewVisit() {
     .then(response => {
         if (response.ok) {
             $('#new-visit-modal').modal('hide');
-            ws.send(JSON.stringify({ type: 'update_visits' }));
+            ws.send(JSON.stringify({ type: 'new_visit' }));
             Swal.fire({
                 title: "¡Buenas noticias!",
                 text: "La visita ha sido registrada",

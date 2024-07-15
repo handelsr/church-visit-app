@@ -12,8 +12,8 @@ ws.onerror = (error) => {
 
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    if (data.type === 'update_visits') {
-        updateVisitsTable(data.visits);
+    if (data.type === 'confirm_attendance') {
+        filterVisitsByDate(document.getElementById('date').value);
     }
 };
 

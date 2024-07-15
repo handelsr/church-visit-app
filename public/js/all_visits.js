@@ -8,8 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        if (data.type === 'update_visits') {
-            updateVisitsTable(data.visits);
+        if (data.type === 'new_visit') {
+            // Solicitar la lista actualizada de visitas al recibir una actualización
+            fetch('/api/visitors')
+                .then(response => response.json())
+                .then(visitors => { 
+                    visitorsData = visitors;
+                    updateVisitsTable(visitors);
+                })
+                .catch(error => console.error('Error al obtener la lista de visitas actualizada:', error));
         }
     };
 
@@ -25,9 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/visitors')
         .then(response => response.json())
         .then(visitors => { 
-             visitorsData = visitors
-             updateVisitsTable(visitors)
-            })
+            visitorsData = visitors;
+            updateVisitsTable(visitors);
+        })
         .catch(error => console.error('Error al obtener la lista de visitas:', error));
 
     // Filtrar visitas en función del texto introducido en el campo de búsqueda

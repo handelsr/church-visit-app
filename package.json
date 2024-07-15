@@ -10,7 +10,8 @@
     "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mysql2": "^3.10.2"
+    "mysql2": "^3.10.2",
+    "ws": "^8.18.0"
   },
   "author": "Tu Nombre",
   "license": "ISC"
