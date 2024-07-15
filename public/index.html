@@ -7,21 +7,34 @@
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+        .btn-group-vertical .btn {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="text-center">
-            <h1 class="mb-4">Bienvenido a la aplicación de registro de visitas</h1>
-            <p class="mb-4">Seleccione a cuál iglesia pertenece o continúe en modo consulta</p>
-            <div class="btn-group-vertical w-100 mb-4">
-                <button class="btn btn-primary mb-2" onclick="selectChurch(1)">Los Trinitarios</button>
-                <button class="btn btn-primary mb-2" onclick="selectChurch(2)">Proyecto Duarte</button>
-                <button class="btn btn-primary mb-2" onclick="selectChurch(3)">Nuevo Despertar</button>
-                <button class="btn btn-primary mb-2" onclick="selectChurch(4)">Trinitarios II</button>
-            </div>
-            <div class="btn-group-vertical w-100">
-                <button class="btn btn-secondary" onclick="continueAsConsultant()">Continuar en modo consulta</button>
-            </div>
+    <div class="container text-center mt-5">
+        <h1 class="mb-4">Bienvenido a la aplicación de registro de visitas</h1>
+        <p class="mb-4">Seleccione a cuál iglesia pertenece o continúe en modo consulta</p>
+        <div class="btn-group-vertical w-100 mb-4">
+            <button class="btn btn-primary mb-2" onclick="selectChurch(1)">Los Trinitarios</button>
+            <button class="btn btn-primary mb-2" onclick="selectChurch(2)">Proyecto Duarte</button>
+            <button class="btn btn-primary mb-2" onclick="selectChurch(3)">Nuevo Despertar</button>
+            <button class="btn btn-primary mb-2" onclick="selectChurch(4)">Trinitarios II</button>
+        </div>
+        <div class="btn-group-vertical w-100">
+            <button class="btn btn-secondary" onclick="continueAsConsultant()">Continuar en modo consulta</button>
         </div>
     </div>
     <!-- Bootstrap JS and dependencies -->

@@ -6,20 +6,21 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 const list = document.getElementById('secretaries-list');
                 data.forEach(secretary => {
-                    const item = document.createElement('div');
+                    const item = document.createElement('a');
                     item.textContent = secretary.name;
-                    item.setAttribute('data-secretaryid', secretary.id)
+                    item.setAttribute('data-secretaryid', secretary.id);
+                    item.classList.add('list-group-item', 'list-group-item-action');
                     list.appendChild(item);
                 });
 
                 document.getElementById('secretaries-list').addEventListener('click', function(event) {
                     const secretaryId = event.target.dataset.secretaryid;
                     if (secretaryId) {
-                      // Redirige a la pantalla de attendance pasando el ID de la secretaria como parámetro
-                      localStorage.setItem('selectedSecretary', secretaryId)
-                      window.location.href = `/attendance.html`;
+                        // Redirige a la pantalla de attendance pasando el ID de la secretaria como parámetro
+                        localStorage.setItem('selectedSecretary', secretaryId);
+                        window.location.href = `/attendance.html`;
                     }
-                  });
+                });
             });
     } else {
         alert('No se ha seleccionado una iglesia.');

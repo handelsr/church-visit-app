@@ -1,5 +1,3 @@
-// consultation_by_day.js
-
 const ws = new WebSocket('ws://localhost:8080');
 
 ws.onopen = () => {
@@ -80,9 +78,9 @@ function updateVisitsTable(visits) {
 }
 
 function toggleStoodUp(visitId, stoodUp, el) {
-    el.classList.remove(stoodUp ? "btn-secondary" : "btn-success")
-    el.classList.add(stoodUp ? "btn-success" : "btn-secondary")
-    el.innerHTML = stoodUp ? "Sí" : "No"
+    el.classList.remove(stoodUp ? "btn-secondary" : "btn-success");
+    el.classList.add(stoodUp ? "btn-success" : "btn-secondary");
+    el.innerHTML = stoodUp ? "Sí" : "No";
 
     fetch(`/api/attendance/stand_up/${visitId}`, {
         method: 'POST',

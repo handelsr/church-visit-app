@@ -1,5 +1,3 @@
-// attendance.js
-
 const ws = new WebSocket('ws://localhost:8080');
 let selectedVisitId = null;
 
@@ -75,7 +73,7 @@ function loadVisitsTable() {
 
 function renderVisitsTable(visits) {
     const visitsTable = document.getElementById('visits-table');
-    visitsTable.innerHTML = ''; // Limpiar tabla anterior
+    visitsTable.innerHTML = '';
 
     if (visits.length === 0) {
         visitsTable.innerHTML = '<p>No hay visitas registradas.</p>';
@@ -83,52 +81,121 @@ function renderVisitsTable(visits) {
     }
 
     const table = document.createElement('table');
-    table.classList.add('table', 'table-striped', 'table-hover');
-    const header = table.createTHead();
-    const row = header.insertRow();
-    row.innerHTML = '<th>Nombre</th><th>Teléfono</th><th>Dirección</th><th>Invitado por</th><th>Acciones</th>';
+    table.className = 'table table-striped';
 
-    const tbody = table.createTBody();
+    const thead = document.createElement('thead');
+    const trHead = document.createElement('tr');
+    trHead.innerHTML = `
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Invitado por</th>
+        <th>Acciones</th>
+    `;
+    thead.appendChild(trHead);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
     visits.forEach(visit => {
-        const tr = tbody.insertRow();
+        const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${visit.name}</td>
             <td>${visit.phone}</td>
-            <td>${visit.address ? visit.address : ''}</td>
             <td>${visit.invited_by}</td>
-            <td><button class="btn btn-info view-btn" data-id="${visit.id}">Ver</button></td>`;
+            <td>
+                <button class="btn btn-info btn-sm" onclick="showVisitDetails(${visit.id})">Ver</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
     });
-
-    tbody.addEventListener('click', (e) => {
-        const target = e.target;
-        if (target.classList.contains('view-btn')) {
-            const visitId = target.getAttribute('data-id');
-            openVisitModal(visitId);
-        }
-    });
+    table.appendChild(tbody);
 
     visitsTable.appendChild(table);
 }
 
-function filterVisitsTable(query) {
-    const rows = document.querySelectorAll('#visits-table tbody tr');
-    rows.forEach(row => {
-        const name = row.cells[0].textContent.toLowerCase();
-        const phone = row.cells[1].textContent.toLowerCase();
-        const address = row.cells[2].textContent.toLowerCase();
-        const invitedBy = row.cells[3].textContent.toLowerCase();
-        const searchQuery = query.toLowerCase();
+function showVisitDetails(visitId) {
+    fetch(`/api/attendance/visit/${visitId}`)
+        .then(response => response.json())
+        .then(visit => {
+            selectedVisitId = visit.id;
+            document.getElementById('visit-name').textContent = visit.name;
+            document.getElementById('visit-phone').textContent = visit.phone;
+            document.getElementById('visit-address').textContent = visit.address || 'No especificado';
+            document.getElementById('visit-invited-by').textContent = visit.invited_by;
+            $('#visit-modal').modal('show');
+        })
+        .catch(error => console.error('Error al cargar los detalles de la visita:', error));
+}
 
-        if (name.includes(searchQuery) || phone.includes(searchQuery) || address.includes(searchQuery) || invitedBy.includes(searchQuery)) {
-            row.style.display = '';
+function confirmAttendance(visitId) {
+    const secretaryId = localStorage.getItem('selectedSecretary');
+    fetch(`/api/attendance/confirm`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ visitId, secretaryId })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            Swal.fire({
+                title: 'Asistencia Confirmada',
+                text: 'La asistencia ha sido confirmada exitosamente.',
+                icon: 'success'
+            });
+            $('#visit-modal').modal('hide');
+            loadVisitsTable();
         } else {
-            row.style.display = 'none';
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al confirmar la asistencia.',
+                icon: 'error'
+            });
         }
-    });
+    })
+    .catch(error => console.error('Error al confirmar la asistencia:', error));
+}
+
+function saveNewVisit() {
+    const churchId = localStorage.getItem('selectedChurch');
+    const secretaryId = localStorage.getItem('selectedSecretary');
+    const name = document.getElementById('new-visit-name').value;
+    const phone = document.getElementById('new-visit-phone').value;
+    const address = document.getElementById('new-visit-address').value;
+    const invitedBy = document.getElementById('new-visit-invited-by').value;
+
+    fetch('/api/attendance/visit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, phone, address, invited_by: invitedBy, church_id: churchId, secretary_id: secretaryId })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            Swal.fire({
+                title: 'Visita Registrada',
+                text: 'La nueva visita ha sido registrada exitosamente.',
+                icon: 'success'
+            });
+            $('#new-visit-modal').modal('hide');
+            document.getElementById('new-visit-form').reset();
+            loadVisitsTable();
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al registrar la visita.',
+                icon: 'error'
+            });
+        }
+    })
+    .catch(error => console.error('Error al registrar la visita:', error));
 }
 
 function loadAllVisits() {
-    fetch('/api/visitors')
+    const churchId = localStorage.getItem('selectedChurch');
+    fetch(`/api/attendance/all_visits?churchId=${churchId}`)
         .then(response => response.json())
         .then(visits => {
             renderAllVisitsTable(visits);
@@ -138,7 +205,7 @@ function loadAllVisits() {
 
 function renderAllVisitsTable(visits) {
     const allVisitsTable = document.getElementById('all-visits-table');
-    allVisitsTable.innerHTML = ''; // Limpiar tabla anterior
+    allVisitsTable.innerHTML = '';
 
     if (visits.length === 0) {
         allVisitsTable.innerHTML = '<p>No hay visitas registradas.</p>';
@@ -146,52 +213,40 @@ function renderAllVisitsTable(visits) {
     }
 
     const table = document.createElement('table');
-    table.classList.add('table', 'table-striped', 'table-hover');
-    const header = table.createTHead();
-    const row = header.insertRow();
-    row.innerHTML = `
+    table.className = 'table table-striped';
+
+    const thead = document.createElement('thead');
+    const trHead = document.createElement('tr');
+    trHead.innerHTML = `
         <th>Nombre</th>
         <th>Teléfono</th>
-        <th>Dirección</th>
         <th>Invitado por</th>
-        <th>Secretaria</th>
-        <th>Iglesia</th>
-        <th>Cantidad de Visitas</th>`;
+    `;
+    thead.appendChild(trHead);
+    table.appendChild(thead);
 
-    const tbody = table.createTBody();
+    const tbody = document.createElement('tbody');
     visits.forEach(visit => {
-        const tr = tbody.insertRow();
+        const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${visit.name}</td>
             <td>${visit.phone}</td>
-            <td>${visit.address ? visit.address : ''}</td>
             <td>${visit.invited_by}</td>
-            <td>${visit.secretary_name}</td>
-            <td>${visit.church_name}</td>
-            <td>${visit.visits_count}</td>`;
+        `;
+        tbody.appendChild(tr);
     });
-
-    tbody.addEventListener('click', (e) => {
-        const target = e.target;
-        if (target.classList.contains('view-btn')) {
-            const visitId = target.getAttribute('data-id');
-            openVisitModal(visitId);
-        }
-    });
+    table.appendChild(tbody);
 
     allVisitsTable.appendChild(table);
 }
 
-function filterAllVisitsTable(query) {
-    const rows = document.querySelectorAll('#all-visits-table tbody tr');
+function filterVisitsTable(query) {
+    const rows = document.querySelectorAll('#visits-table table tbody tr');
     rows.forEach(row => {
-        const name = row.cells[0].textContent.toLowerCase();
-        const phone = row.cells[1].textContent.toLowerCase();
-        const address = row.cells[2].textContent.toLowerCase();
-        const invitedBy = row.cells[3].textContent.toLowerCase();
-        const searchQuery = query.toLowerCase();
-
-        if (name.includes(searchQuery) || phone.includes(searchQuery) || address.includes(searchQuery) || invitedBy.includes(searchQuery)) {
+        const name = row.children[0].textContent.toLowerCase();
+        const phone = row.children[1].textContent.toLowerCase();
+        const invitedBy = row.children[2].textContent.toLowerCase();
+        if (name.includes(query.toLowerCase()) || phone.includes(query.toLowerCase()) || invitedBy.includes(query.toLowerCase())) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
@@ -199,102 +254,16 @@ function filterAllVisitsTable(query) {
     });
 }
 
-function openVisitModal(visitId) {
-    selectedVisitId = visitId;
-    fetch(`/api/visits/${visitId}`)
-        .then(response => response.json())
-        .then(visit => {
-            if (visit.length) {
-                document.getElementById('visit-name').textContent = visit[0].name;
-                document.getElementById('visit-phone').textContent = visit[0].phone;
-                document.getElementById('visit-address').textContent = visit[0].address ? visit[0].address : '';
-                document.getElementById('visit-invited-by').textContent = visit[0].invited_by;
-                $('#visit-modal').modal('show');
-            }
-        })
-        .catch(error => console.error('Error al cargar los detalles de la visita:', error));
-}
-
-function confirmAttendance(visitId) {
-    const secretaryId = localStorage.getItem('selectedSecretary');
-    fetch(`/api/attendance/${visitId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ secretary_id: secretaryId }) // Reemplazar con el ID de la secretaria actual
-    })
-    .then(response => {
-        if (response.ok) {
-            $('#visit-modal').modal('hide');
-            ws.send(JSON.stringify({ type: 'confirm_attendance' }));
-            loadVisitsTable()
-            Swal.fire({
-                title: "¡Buenas noticias!",
-                text: "La asistencia ha sido confirmada",
-                icon: "success"
-              });
+function filterAllVisitsTable(query) {
+    const rows = document.querySelectorAll('#all-visits-table table tbody tr');
+    rows.forEach(row => {
+        const name = row.children[0].textContent.toLowerCase();
+        const phone = row.children[1].textContent.toLowerCase();
+        const invitedBy = row.children[2].textContent.toLowerCase();
+        if (name.includes(query.toLowerCase()) || phone.includes(query.toLowerCase()) || invitedBy.includes(query.toLowerCase())) {
+            row.style.display = '';
         } else {
-            Swal.fire({
-                title: "Malas noticias!",
-                text: "La asistencia no se pudo confirmar",
-                icon: "error"
-              });
+            row.style.display = 'none';
         }
-    })
-    .catch(error => {
-        Swal.fire({
-            title: "Malas noticias!",
-            text: "La asistencia no se pudo confirmar",
-            icon: "error"
-          });
     });
-}
-
-function saveNewVisit() {
-    const newVisitName = document.getElementById('new-visit-name').value;
-    const newVisitPhone = document.getElementById('new-visit-phone').value;
-    const newVisitAddress = document.getElementById('new-visit-address').value;
-    const newVisitInvitedBy = document.getElementById('new-visit-invited-by').value;
-    const secretaryId = localStorage.getItem('selectedSecretary');
-    const churchId = localStorage.getItem('selectedChurch');
-
-    fetch('/api/visits', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name: newVisitName,
-            phone: newVisitPhone,
-            address: newVisitAddress,
-            invited_by: newVisitInvitedBy,
-            church_id: churchId,
-            secretary_id: secretaryId
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            $('#new-visit-modal').modal('hide');
-            ws.send(JSON.stringify({ type: 'new_visit' }));
-            Swal.fire({
-                title: "¡Buenas noticias!",
-                text: "La visita ha sido registrada",
-                icon: "success"
-              });
-        } else {
-            Swal.fire({
-                title: "Malas noticias!",
-                text: "La asistencia no se pudo registrar",
-                icon: "error"
-              });
-        }
-    })
-    .catch(error => {
-        Swal.fire({
-            title: "Malas noticias!",
-            text: "La asistencia no se pudo registrar",
-            icon: "error"
-          });
-        });
 }

@@ -6,18 +6,30 @@
     <title>Secretaria de Iglesia</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Secretaria de Iglesia</h1>
-        <div class="d-flex justify-content-between mb-4">
+        <div class="d-flex justify-content-between mb-4 flex-wrap">
             <div>
-                <button id="back-secretaries-btn" class="btn btn-secondary">Volver a Secretarias</button>
-                <button id="home-btn" class="btn btn-secondary">Inicio</button>
+                <button id="back-secretaries-btn" class="btn btn-secondary mb-2">Volver a Secretarias</button>
+                <button id="home-btn" class="btn btn-secondary mb-2">Inicio</button>
             </div>
             <div>
-                <button id="new-visit-btn" class="btn btn-primary">Registrar Nueva Visita</button>
-                <button id="view-all-visits-btn" class="btn btn-info ml-2">Ver Todas las Visitas</button>
+                <button id="new-visit-btn" class="btn btn-primary mb-2">Registrar Nueva Visita</button>
+                <button id="view-all-visits-btn" class="btn btn-info mb-2 ml-2">Ver Todas las Visitas</button>
             </div>
         </div>
         <div class="d-flex justify-content-between mb-4">
