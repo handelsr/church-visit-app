@@ -29,7 +29,7 @@ app.listen(PORT, () => {
 const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', (ws) => {
-
+    console.log('websocket connected')
     ws.on('message', async (message) => {
         const data = JSON.parse(message);
 
