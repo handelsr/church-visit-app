@@ -3,6 +3,12 @@ jobs:
   build-node:
     runs-on: ubuntu-latest
     container: node:20
+    env:
+      DB_HOST: monorail.proxy.rlwy.net
+      DB_USER: root
+      DB_PASSWORD: yzgXBkljkXrlSqbVoNYKdJzjDSoKdMpC
+      DB_NAME: railway
+      PORT: 57157
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
