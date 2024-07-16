@@ -1,14 +1,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const secretaryRoutes = require('./routes/secretaryRoutes');
 const visitorRoutes = require('./routes/visitorRoutes');
 const visitsRoutes = require('./routes/visitsRoutes');
 const WebSocket = require('ws');
-
-dotenv.config();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
