@@ -7,7 +7,6 @@ wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
         const data = JSON.parse(message);
 
-        console.log(data.type)
         if (data.type === 'new_visit' || data.type === 'confirm_attendance') {
             // Notificar a todos los clientes conectados
             wss.clients.forEach(client => {
