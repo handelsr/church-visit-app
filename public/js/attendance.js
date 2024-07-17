@@ -1,13 +1,10 @@
-const ws = new WebSocket(`wss://${window.location.hostname}:443`);
+import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
+const socket = io();
 let selectedVisitId = null;
 
-ws.onopen = () => {
-    console.log('Conexión establecida con el servidor WebSocket.');
-};
-
-ws.onerror = (error) => {
-    console.error('Error en la conexión WebSocket:', error);
-};
+socket.on("connect_error", (error) => {
+    console.log(error);
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     loadVisitsTable();
@@ -143,6 +140,7 @@ function confirmAttendance(visitId) {
                 text: 'La asistencia ha sido confirmada exitosamente.',
                 icon: 'success'
             });
+            socket.emit("confirm_attendance");
             $('#visit-modal').modal('hide');
             loadVisitsTable();
         } else {
@@ -164,12 +162,12 @@ function saveNewVisit() {
     const address = document.getElementById('new-visit-address').value;
     const invitedBy = document.getElementById('new-visit-invited-by').value;
 
-    fetch('/api/attendance/visit', {
+    fetch('/api/visitors/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, phone, address, invited_by: invitedBy, church_id: churchId, secretary_id: secretaryId })
+        body: JSON.stringify({ name, phone, address, invited_by: invitedBy, secretary_id: secretaryId })
     })
     .then(response => response.json())
     .then(result => {
@@ -179,6 +177,7 @@ function saveNewVisit() {
                 text: 'La nueva visita ha sido registrada exitosamente.',
                 icon: 'success'
             });
+            socket.emit("new_visit");
             $('#new-visit-modal').modal('hide');
             document.getElementById('new-visit-form').reset();
             loadVisitsTable();

@@ -1,32 +1,23 @@
+import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     // Conectar al servidor de WebSockets
-    const socket = new WebSocket(`wss://${window.location.hostname}:443`);
+    const socket = io();
 
-    socket.onopen = () => {
-        console.log('Conexión establecida con el servidor WebSocket.');
-    };
+    socket.on("connect_error", (error) => {
+        console.log(error);
+    });
 
-    socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === 'new_visit') {
-            // Solicitar la lista actualizada de visitas al recibir una actualización
-            fetch('/api/visitors')
-                .then(response => response.json())
-                .then(visitors => { 
-                    visitorsData = visitors;
-                    updateVisitsTable(visitors);
-                })
-                .catch(error => console.error('Error al obtener la lista de visitas actualizada:', error));
-        }
-    };
-
-    socket.onerror = (error) => {
-        console.error('Error en la conexión WebSocket:', error);
-    };
-
-    socket.onclose = () => {
-        console.log('Conexión WebSocket cerrada.');
-    };
+    socket.on("new_visit", () => {
+        // Solicitar la lista actualizada de visitas al recibir una actualización
+        fetch('/api/visitors')
+        .then(response => response.json())
+        .then(visitors => { 
+            visitorsData = visitors;
+            updateVisitsTable(visitors);
+        })
+        .catch(error => console.error('Error al obtener la lista de visitas actualizada:', error));
+    })
 
     // Solicitar la lista inicial de visitas al cargar la página
     fetch('/api/visitors')

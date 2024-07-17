@@ -5,8 +5,11 @@ const attendanceRoutes = require('./routes/attendanceRoutes');
 const secretaryRoutes = require('./routes/secretaryRoutes');
 const visitorRoutes = require('./routes/visitorRoutes');
 const visitsRoutes = require('./routes/visitsRoutes');
-const WebSocket = require('ws');
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
+const httpServer = createServer(app);
+const io = new Server(httpServer);
 
 
 app.use(bodyParser.json());
@@ -20,32 +23,23 @@ app.use('/api/visits', visitsRoutes);
 app.use(express.static('public'));
 
 const PORT =  3000;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
 
+io.on('connection', (socket) => {
+    console.log('Un cliente se ha conectado');
 
-//websocket server
+    socket.on('new_visit', () => {
+        io.emit('new_visit');
+    });
 
-const wss = new WebSocket.Server({ port: 443 });
+    socket.on('confirm_attendance', () => {
+        io.emit('confirm_attendance');
+    });
 
-wss.on('connection', (ws) => {
-    console.log('websocket connected')
-    ws.on('message', async (message) => {
-        const data = JSON.parse(message);
-
-        if (data.type === 'new_visit' || data.type === 'confirm_attendance') {
-            // Notificar a todos los clientes conectados
-            wss.clients.forEach(client => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({ type: data.type }));
-                }
-            });
-
-            ws.on('close', () => {
-                console.log('Cliente desconectado del servidor WebSocket.');
-            });
-        }
+    socket.on('disconnect', () => {
+        console.log('Cliente desconectado del servidor WebSocket.');
     });
 });

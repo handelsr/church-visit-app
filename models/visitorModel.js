@@ -7,7 +7,7 @@ const Visitor = {
             if (err) {
                 return callback(err);
             }
-            callback(null, { id: results.insertId, name, phone, address, invited_by, secretary_id });
+            callback(null, { id: results.insertId, name, phone, address, invited_by, secretary_id, success: true });
         });
     },
 

@@ -1,16 +1,6 @@
 const Visitor = require('../models/visitorModel');
 const Attendance = require('../models/attendanceModel');
 
-exports.addVisitor = (req, res) => {
-    const { name, phone, address, invited_by, secretary_id } = req.body;
-    Visitor.add(name, phone, address, invited_by, secretary_id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(result);
-    });
-};
-
 exports.getVisitors = (req, res) => {
     Visitor.get((err, visitors) => {
         if (err) {
@@ -53,7 +43,7 @@ exports.getVisitorByDate = (req, res) => {
 };
 
 exports.addVisitor = (req, res) => {
-    const { name, phone, address, invited_by, church_id, secretary_id } = req.body;
+    const { name, phone, address, invited_by, secretary_id } = req.body;
     
     const newVisitor = { 
         name, 

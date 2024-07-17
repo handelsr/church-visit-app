@@ -8,7 +8,7 @@ const Attendance = {
                 return callback(err);
             }
             
-            callback(null, { id: results.insertId, visit_id, date_time, secretary_id });
+            callback(null, { id: results.insertId, visit_id, date_time, secretary_id, success: true });
         });
     },
     updateStoodUp : (id, stoodUp, callback) => {

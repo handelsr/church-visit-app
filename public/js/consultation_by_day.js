@@ -1,19 +1,23 @@
-const ws = new WebSocket(`wss://${window.location.hostname}:443`);
+import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 
-ws.onopen = () => {
-    console.log('Conexión establecida con el servidor WebSocket.');
-};
+// Conectar al servidor de WebSockets
+const socket = io();
 
-ws.onerror = (error) => {
-    console.error('Error en la conexión WebSocket:', error);
-};
+socket.on("connect_error", (error) => {
+    console.log(error);
+});
 
-ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    if (data.type === 'confirm_attendance') {
+socket.on("confirm_attendance", () => {
+    if(moment(document.getElementById('date').value).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
         filterVisitsByDate(document.getElementById('date').value);
     }
-};
+})
+
+socket.on("new_visit", () => {
+    if(moment(document.getElementById('date').value).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
+        filterVisitsByDate(document.getElementById('date').value);
+    }
+})
 
 document.addEventListener('DOMContentLoaded', () => {
     const filterBtn = document.getElementById('filter-btn');

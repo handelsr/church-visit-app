@@ -9,7 +9,7 @@ const VisitorController = require('../controllers/visitorController');
 router.get('/visits', VisitorController.getVisitorsAbsentByChurch);
 
 // POST /api/attendance/:id
-router.post('/:id', Attendance.addAttendance);
+router.post('/confirm', Attendance.addAttendance);
 
 
 router.post('/stand_up/:id', Attendance.toggleStoodUp);

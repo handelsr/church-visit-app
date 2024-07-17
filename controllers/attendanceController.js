@@ -1,9 +1,7 @@
 const Attendance = require('../models/attendanceModel');
 
 exports.addAttendance = (req, res) => {
-    const { secretary_id } = req.body;
-    
-    const visitId = req.params.id;
+    const { visitId, secretary_id } = req.body;
     const newAttendance = {
         visit_id: visitId,
         secretary_id: secretary_id, // Asegúrate de incluir el ID de la secretaria aquí
