@@ -40,7 +40,10 @@ function updateVisitsTable(visitors) {
     tableBody.innerHTML = '';
 
     visitors.forEach(visitor => {
-        const attendanceDays = formatAttendanceDays(visitor.attendance_days.split(','));
+        let attendanceDays = ""
+        if (visitor.attendance_days !== "")
+            attendanceDays = formatAttendanceDays(visitor.attendance_days.split(','));
+
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${visitor.name}</td>
