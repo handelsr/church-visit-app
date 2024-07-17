@@ -1,5 +1,3 @@
-import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
-
 document.addEventListener('DOMContentLoaded', () => {
     // Conectar al servidor de WebSockets
     const socket = io();

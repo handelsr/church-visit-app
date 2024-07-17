@@ -1,4 +1,3 @@
-import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 const socket = io();
 let selectedVisitId = null;
 
@@ -56,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         saveNewVisit();
     });
+
 });
 
 function loadVisitsTable() {
@@ -109,16 +109,19 @@ function renderVisitsTable(visits) {
     visitsTable.appendChild(table);
 }
 
+    
 function showVisitDetails(visitId) {
-    fetch(`/api/attendance/visit/${visitId}`)
+    fetch(`/api/visits/${visitId}`)
         .then(response => response.json())
         .then(visit => {
-            selectedVisitId = visit.id;
-            document.getElementById('visit-name').textContent = visit.name;
-            document.getElementById('visit-phone').textContent = visit.phone;
-            document.getElementById('visit-address').textContent = visit.address || 'No especificado';
-            document.getElementById('visit-invited-by').textContent = visit.invited_by;
-            $('#visit-modal').modal('show');
+            if(visit.length){
+                selectedVisitId = visit[0].id;
+                document.getElementById('visit-name').textContent = visit[0].name;
+                document.getElementById('visit-phone').textContent = visit[0].phone;
+                document.getElementById('visit-address').textContent = visit[0].address || '';
+                document.getElementById('visit-invited-by').textContent = visit[0].invited_by;
+                $('#visit-modal').modal('show');
+            }
         })
         .catch(error => console.error('Error al cargar los detalles de la visita:', error));
 }
@@ -155,7 +158,6 @@ function confirmAttendance(visitId) {
 }
 
 function saveNewVisit() {
-    const churchId = localStorage.getItem('selectedChurch');
     const secretaryId = localStorage.getItem('selectedSecretary');
     const name = document.getElementById('new-visit-name').value;
     const phone = document.getElementById('new-visit-phone').value;
@@ -193,8 +195,7 @@ function saveNewVisit() {
 }
 
 function loadAllVisits() {
-    const churchId = localStorage.getItem('selectedChurch');
-    fetch(`/api/attendance/all_visits?churchId=${churchId}`)
+    fetch(`/api/visitors`)
         .then(response => response.json())
         .then(visits => {
             renderAllVisitsTable(visits);
