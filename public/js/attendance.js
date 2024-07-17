@@ -1,4 +1,4 @@
-const ws = new WebSocket(`wss://${window.location.hostname}:8080`);
+const ws = new WebSocket(`wss://${window.location.hostname}:443`);
 let selectedVisitId = null;
 
 ws.onopen = () => {

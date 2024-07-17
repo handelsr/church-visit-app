@@ -1,4 +1,4 @@
-const ws = new WebSocket(`wss://${window.location.hostname}:8080`);
+const ws = new WebSocket(`wss://${window.location.hostname}:443`);
 
 ws.onopen = () => {
     console.log('Conexión establecida con el servidor WebSocket.');
