@@ -1,4 +1,4 @@
-# Church Visit App
+# Gestión de Visitas
 
 Aplicación para registrar visitas a la iglesia durante una semana de campañas evangelísticas de 4 iglesias en conjunto.
 

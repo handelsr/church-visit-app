@@ -5,14 +5,19 @@ const router = express.Router();
 const Attendance = require('../controllers/attendanceController');
 const VisitorController = require('../controllers/visitorController');
 
-// GET /api/secretary/visits
+// Obtener visitantes por iglesia
 router.get('/visits', VisitorController.getVisitorsAbsentByChurch);
 
-// POST /api/attendance/:id
+// Obtener asistencias de hoy por iglesia
+router.get('/today', Attendance.getTodayAttendance);
+
+// Confirmar asistencia
 router.post('/confirm', Attendance.addAttendance);
 
+// Eliminar asistencia
+router.delete('/delete/:visitId', Attendance.deleteAttendance);
 
-router.post('/stand_up/:id', Attendance.toggleStoodUp);
-
+// Actualizar si se puso de pie
+router.put('/:id/stood-up', Attendance.toggleStoodUp);
 
 module.exports = router;

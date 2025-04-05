@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Gestión de Visitas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para íconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding-right: 10px;
+            padding-left: 10px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        .navbar {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 15px;
+            padding: 0.5rem 1rem;
+        }
+        .navbar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+        .user-role {
+            font-weight: 500;
+            color: #495057;
+            margin-right: 15px;
+        }
+        .nav-buttons {
+            margin-left: auto;
+            margin-right: 15px;
+        }
+    </style>
+    <!-- Script de verificación de autenticación -->
+    <script src="js/auth-check.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <div class="navbar-container">
+                <div class="navbar-left">
+                    <a class="navbar-brand" href="#">Gestión de Visitas</a>
+                </div>
+                <div class="navbar-right">
+                    <div class="user-role" id="user-info">
+                        <!-- El rol del usuario se insertará aquí desde JS -->
+                    </div>
+                    <div class="nav-buttons">
+                        <a href="consultation.html" class="btn btn-outline-info btn-sm mr-2">
+                            <i class="fas fa-search"></i> Consultas
+                        </a>
+                    </div>
+                    <button id="logout-btn" class="btn btn-outline-danger btn-sm">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <h1 class="text-center mb-4">Gestión de Usuarios</h1>
+        
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-12 text-center">
+                <button id="new-user-btn" class="btn btn-primary mb-2">Nuevo Usuario</button>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-8">
+                <input id="search-input" type="text" class="form-control" placeholder="Buscar usuarios...">
+            </div>
+        </div>
+        
+        <div id="users-table" class="table-responsive">
+            <!-- Aquí se mostrará la tabla de usuarios -->
+            <div class="text-center p-5" id="loading-message">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Cargando...</span>
+                </div>
+                <p class="mt-2">Cargando usuarios...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar usuario -->
+    <div id="user-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Nuevo Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="user-form">
+                        <input type="hidden" id="user-id">
+                        <div class="form-group">
+                            <label for="username">Usuario:</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Nombre completo:</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Contraseña:</label>
+                            <input type="password" class="form-control" id="password">
+                            <small id="password-help" class="form-text text-muted">Dejar en blanco para mantener la contraseña actual (sólo al editar).</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Rol:</label>
+                            <select class="form-control" id="role" required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="admin">Administrador</option>
+                                <option value="secretary">Secretaria</option>
+                                <option value="viewer">Consulta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="church-id">Iglesia:</label>
+                            <select class="form-control" id="church-id" required>
+                                <option value="">Seleccionar iglesia</option>
+                                <!-- Las opciones se cargarán dinámicamente -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="save-user-btn" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para eliminar usuario -->
+    <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea eliminar este usuario? Esta acción no se puede deshacer.</p>
+                    <p><strong>Usuario: </strong><span id="delete-username"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="confirm-delete-btn" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/users.js"></script>
+</body>
+</html> 

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Gestión de Visitas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        #loading-indicator {
+            display: none;
+        }
+    </style>
+    <!-- Script de verificación de autenticación -->
+    <script src="js/auth-check.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="h3">Acceso al Sistema</h1>
+                <p class="text-muted">Campaña de Visitas Iglesias</p>
+            </div>
+            
+            <form id="login-form" action="#" method="post">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Ingrese su usuario" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                </div>
+                
+                <div class="alert alert-danger" id="error-message" style="display: none;">
+                    Usuario o contraseña incorrectos. Por favor intente nuevamente.
+                </div>
+                
+                <button type="submit" id="login-button" class="btn btn-primary btn-login">
+                    <span id="loading-indicator" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                    Iniciar Sesión
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Sistema de registro de asistencia para campañas</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html> 

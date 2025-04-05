@@ -43,22 +43,38 @@ exports.getVisitorByDate = (req, res) => {
 };
 
 exports.addVisitor = (req, res) => {
-    const { name, phone, address, invited_by, secretary_id } = req.body;
+    const { name, phone, address, invited_by, church_id, user_id } = req.body;
     
     const newVisitor = { 
         name, 
         phone, 
         address, 
         invited_by, 
-        secretary_id
+        church_id,
+        user_id 
     };
+    
     Visitor.add(newVisitor, (err, result) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
         
-        Attendance.add({visit_id: result.id, date_time: new Date(), secretary_id},()=>{})
         res.json(result);
     });
+};
 
+// Método para obtener visitantes por iglesia
+exports.getVisitorsByChurch = (req, res) => {
+    const { churchId } = req.query;
+    
+    if (!churchId) {
+        return res.status(400).json({ error: 'Se requiere el ID de la iglesia' });
+    }
+    
+    Visitor.getVisitorsByChurch(churchId, (err, visitors) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(visitors);
+    });
 };
