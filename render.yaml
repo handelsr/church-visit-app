@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: campaignattendance
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: pnpm run start
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: DB_HOST
+        value: mysql-pos49896.alwaysdata.net
+      - key: DB_NAME
+        value: pos49896_campaign_attendance
+      - key: DB_PASSWORD
+        value: Tit^Hb^rtAG5v$0O
+      - key: DB_PORT
+        value: 3306
+      - key: DB_USER
+        value: pos49896
+      - key: JWT_SECRET
+        value: a57a061ddd05ca58872a24843d6c0042408816e0f0f16027e176ed419951233aaf827bd1bbb56beebafafc5a69be813a9c9ef305cc6940e7be011a6e4f45b493684e770c3fea98e05448b779e47b21a8a5548f0cf3e526f13c722e11fb0dd3e5d85a7554ed4b136e8bb9f264322f8eb435445575c01add4fdb6067bc8899ade52527ac4b898f6ae9ce0ce53c342558b5960f8c54c5d3805f5f4e1214fc96f4f1aee47cf30656fc2c5746374ac291d5e9a57329320d29ac376a88a87fa78c714784c088c7c9edc38212066bff5b4b2126aa4b327c4c58856f83c258df438089a6a4dcab84d78d187138b3fde49ad1a429b7d2e2fac461dceb0ae7cc24f09ce78a
