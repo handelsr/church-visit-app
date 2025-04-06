@@ -3,7 +3,7 @@ services:
     name: campaignattendance
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: pnpm install
     startCommand: pnpm run start
     envVars:
       - key: PORT
